@@ -1,0 +1,13 @@
+
+
+Usage
+
+    This section shows how to use this tool.
+
+    Every command must be executed in the installation directory.
+
+* Simple usage
+
++------------------------------------------------------
+./run.sh ...
++------------------------------------------------------

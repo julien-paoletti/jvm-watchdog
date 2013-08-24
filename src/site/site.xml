@@ -1,0 +1,36 @@
+<project xmlns="http://maven.apache.org/DECORATION/1.3.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/DECORATION/1.3.0 http://maven.apache.org/xsd/decoration-1.3.0.xsd"
+         name="${project.name} - Documentation">
+    
+    <skin>
+        <groupId>org.apache.maven.skins</groupId>
+        <artifactId>maven-fluido-skin</artifactId>
+        <version>1.3.0</version>
+    </skin>
+  
+    <custom>
+        <fluidoSkin>
+            <sourceLineNumbersEnabled>true</sourceLineNumbersEnabled>
+        </fluidoSkin>
+    </custom>
+
+    <!--    <bannerLeft>
+        <name>Maven</name>
+        <src>http://maven.apache.org/images/apache-maven-project.png</src>
+        <href>http://maven.apache.org/</href>
+    </bannerLeft>-->
+    <!--    <bannerRight>
+        <src>http://maven.apache.org/images/maven-small.gif</src>
+    </bannerRight>-->
+    <body>
+        <links>
+            <item name="CGI" href="http://cgi.com/"/>
+        </links>
+
+        <menu name="${project.name}">
+            <item name="Usage" href="usage.html"/>
+        </menu>
+
+        <menu ref="reports"/>
+    </body>
+</project>

@@ -1,0 +1,269 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.javabenchmark</groupId>
+    <artifactId>jvm-watchdog</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>JVM WatchDog</name>
+    <url>http://blog.javabenchmark.org</url>
+    <description>
+        This is a tool that monitors a given JVM process in order to detect any failures that may occur.
+    </description>
+    
+    <developers>
+        <developer>
+            <id>JPAO</id>
+            <email>julien.paoletti@gmail.com</email>
+            <name>Julien Paoletti</name>
+        </developer>
+    </developers>
+
+    <!--
+                                                                                        
+                                                                    ,,                  
+    `7MM"""Mq.                                               mm     db                  
+      MM   `MM.                                              MM                         
+      MM   ,M9 `7Mb,od8 ,pW"Wq.`7MMpdMAo.  .gP"Ya `7Mb,od8 mmMMmm `7MM  .gP"Ya  ,pP"Ybd 
+      MMmmdM9    MM' "'6W'   `Wb MM   `Wb ,M'   Yb  MM' "'   MM     MM ,M'   Yb 8I   `" 
+      MM         MM    8M     M8 MM    M8 8M""""""  MM       MM     MM 8M"""""" `YMMMa. 
+      MM         MM    YA.   ,A9 MM   ,AP YM.    ,  MM       MM     MM YM.    , L.   I8 
+    .JMML.     .JMML.   `Ybmd9'  MMbmmd'   `Mbmmd'.JMML.     `Mbmo.JMML.`Mbmmd' M9mmmP' 
+                                 MM                                                     
+                               .JMML.                                                   
+                           
+    -->
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+  
+    <build>
+        
+        <!--
+        
+                    ,,                        ,,                      
+        `7MM"""Mq.`7MM                        db                      
+          MM   `MM. MM                                                
+          MM   ,M9  MM `7MM  `7MM  .P"Ybmmm `7MM  `7MMpMMMb.  ,pP"Ybd 
+          MMmmdM9   MM   MM    MM :MI  I8     MM    MM    MM  8I   `" 
+          MM        MM   MM    MM  WmmmP"     MM    MM    MM  `YMMMa. 
+          MM        MM   MM    MM 8M          MM    MM    MM  L.   I8 
+        .JMML.    .JMML. `Mbod"YML.YMMMMMb  .JMML..JMML  JMML.M9mmmP' 
+                                  6'     dP                           
+                                  Ybmmmd'        
+                                                       
+        -->
+        <plugins>
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.2</version>
+                <configuration>
+                    <!--<locales>en,fr</locales>-->
+                    <reportPlugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-project-info-reports-plugin</artifactId>
+                            <version>2.4</version>
+                            <configuration>
+                                <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
+                                <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+                            </configuration>
+                            <reports>
+                                <report>index</report>
+                                <report>project-team</report>
+                                <!--<report>license</report>-->
+                                <!--<report>mailing-list</report>-->
+                                <report>dependencies</report>
+                                <report>dependency-convergence</report>
+                                <report>plugin-management</report>
+                                <!--<report>cim</report>-->
+                                <!--<report>issue-tracking</report>-->
+                                <report>scm</report>
+                                <report>summary</report>
+                            </reports>
+                        </plugin>
+                                
+                        <!-- tests reporting -->
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-surefire-report-plugin</artifactId>
+                            <version>2.12.4</version>
+                        </plugin>
+                                
+                        <!-- unit test code coverage -->
+                        <plugin>
+                            <groupId>org.jacoco</groupId>
+                            <artifactId>jacoco-maven-plugin</artifactId>
+                            <version>0.6.0.201210061924</version>
+                        </plugin>
+                        
+                        <!-- javadoc + UML diagrams (graphviz must installed) -->
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-javadoc-plugin</artifactId>
+                            <version>2.9</version>
+                            <configuration>
+                                
+                                <!-- custom css -->
+                                <stylesheetfile>${basedir}/src/site/resources/css/javadoc.css</stylesheetfile>
+                                        
+                                <!-- custom doclet -->
+<!--                                <doclet>org.umlgraph.doclet.UmlGraphDoc</doclet>
+                                <docletArtifact>
+                                    <groupId>org.umlgraph</groupId>
+                                    <artifactId>doclet</artifactId>
+                                    <version>5.1</version>
+                                </docletArtifact>-->
+                                
+                                <!--<additionalparam>-attributes -operations -visibility -types -enumerations -enumconstants -postfixpackage</additionalparam>-->
+                                
+                                <!--                                        <show>private</show>
+                                <additionalparam>-all -constructors</additionalparam>
+                                <useStandardDocletOptions>false</useStandardDocletOptions>-->
+                                        
+                            </configuration>
+                        </plugin>
+                        
+                        <!-- checkstyle -->    
+                        <!--                                <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-checkstyle-plugin</artifactId>
+                        <version>2.9.1</version>
+                        <configuration>-->
+                        <!-- Adopt config location to your needs, or remove configuration entry completly to use default version.
+                        <configLocation>http://stud.hs-heilbronn.de/~nischmid/development/checkstyle-config.xml</configLocation>-->
+                        <!--                                    </configuration>
+                        </plugin>-->
+                        
+                        <!-- findbugs -->
+                        <plugin>
+                            <groupId>org.codehaus.mojo</groupId>
+                            <artifactId>findbugs-maven-plugin</artifactId>
+                            <version>2.5.2</version>
+                            <configuration>
+                                <argLine>-Xmx256m</argLine>
+                                <argLine>-XX:MaxPermSize=256m</argLine>
+                            </configuration>
+                        </plugin>
+                        
+                        <!-- jdepend for package cycles -->
+                        <plugin>
+                            <groupId>org.codehaus.mojo</groupId>
+                            <artifactId>jdepend-maven-plugin</artifactId>
+                        </plugin>
+                        
+                        <!-- pmd -->
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-pmd-plugin</artifactId>
+                            <version>2.7.1</version>
+                            <configuration>
+                                <linkXref>true</linkXref>
+                                <minimumTokens>100</minimumTokens>
+                                <minimumPriority>3</minimumPriority>
+                                <targetJdk>1.5</targetJdk>
+                            </configuration>
+                        </plugin>
+                        
+                        <!-- todo tags check -->
+                        <plugin>
+                            <groupId>org.codehaus.mojo</groupId>
+                            <artifactId>taglist-maven-plugin</artifactId>
+                            <version>2.4</version>
+                        </plugin>
+                        
+                        <!-- javadoc for source code cross references -->
+                        <!--                                <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-jxr-plugin</artifactId>
+                            <version>2.3</version>
+                        </plugin>-->
+                        
+                    </reportPlugins>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-site</id> <!-- this is used for inheritance merges -->
+                        <phase>package</phase> <!-- bind to the packaging phase -->
+                        <goals>
+                            <goal>site</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <!-- makes a zip of the project's binaries -->
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <descriptors>
+                        <descriptor>src/main/assembly/descriptor.xml</descriptor>
+                    </descriptors>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            
+        </plugins>
+    </build>
+
+    <!--
+                                                              ,,                              ,,                  
+    `7MM"""Yb.                                              `7MM                              db                  
+      MM    `Yb.                                              MM                                                  
+      MM     `Mb  .gP"Ya `7MMpdMAo.  .gP"Ya `7MMpMMMb.   ,M""bMM  .gP"Ya `7MMpMMMb.  ,p6"bo `7MM  .gP"Ya  ,pP"Ybd 
+      MM      MM ,M'   Yb  MM   `Wb ,M'   Yb  MM    MM ,AP    MM ,M'   Yb  MM    MM 6M'  OO   MM ,M'   Yb 8I   `" 
+      MM     ,MP 8M""""""  MM    M8 8M""""""  MM    MM 8MI    MM 8M""""""  MM    MM 8M        MM 8M"""""" `YMMMa. 
+      MM    ,dP' YM.    ,  MM   ,AP YM.    ,  MM    MM `Mb    MM YM.    ,  MM    MM YM.    ,  MM YM.    , L.   I8 
+    .JMMmmmdP'    `Mbmmd'  MMbmmd'   `Mbmmd'.JMML  JMML.`Wbmd"MML.`Mbmmd'.JMML  JMML.YMbmd' .JMML.`Mbmmd' M9mmmP' 
+                           MM                                                                                     
+                         .JMML.                                                                                   
+    -->
+    <dependencies>
+        
+        <!-- logging -->
+        <dependency> 
+            <groupId>org.tinylog</groupId> 
+            <artifactId>tinylog</artifactId> 
+            <version>0.8</version> 
+        </dependency>
+        
+        <!-- options parsing -->
+        <dependency>
+            <groupId>net.sf.jopt-simple</groupId>
+            <artifactId>jopt-simple</artifactId>
+            <version>4.5</version>
+        </dependency>
+        
+        <!-- JUnit -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <!-- tools RT -->
+        <dependency>
+            <groupId>com.sun</groupId>
+            <artifactId>tools</artifactId>
+            <version>1.6</version>
+            <scope>system</scope>
+            <systemPath>${java.home}/../lib/tools.jar</systemPath>
+        </dependency>
+        
+    </dependencies>
+    
+</project>

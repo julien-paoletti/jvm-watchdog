@@ -80,7 +80,7 @@
             </plugin>
 
             <!-- executes test with java agent options of the JVM -->
-<!--            <plugin>
+            <!--            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.14</version>
@@ -88,146 +88,6 @@
                     <argLine>-javaagent:target/${project.build.finalName}.jar</argLine>
                 </configuration>
             </plugin>-->
-            
-            <!-- site -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
-                <version>3.2</version>
-                <configuration>
-                    <!--<locales>en,fr</locales>-->
-                    <reportPlugins>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-project-info-reports-plugin</artifactId>
-                            <version>2.4</version>
-                            <configuration>
-                                <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
-                                <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
-                            </configuration>
-                            <reports>
-                                <report>index</report>
-                                <report>project-team</report>
-                                <!--<report>license</report>-->
-                                <!--<report>mailing-list</report>-->
-                                <report>dependencies</report>
-                                <report>dependency-convergence</report>
-                                <report>plugin-management</report>
-                                <!--<report>cim</report>-->
-                                <!--<report>issue-tracking</report>-->
-                                <report>scm</report>
-                                <report>summary</report>
-                            </reports>
-                        </plugin>
-                                
-                        <!-- tests reporting -->
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-surefire-report-plugin</artifactId>
-                            <version>2.12.4</version>
-                        </plugin>
-                                
-                        <!-- unit test code coverage -->
-                        <plugin>
-                            <groupId>org.jacoco</groupId>
-                            <artifactId>jacoco-maven-plugin</artifactId>
-                            <version>0.6.0.201210061924</version>
-                        </plugin>
-                        
-                        <!-- javadoc + UML diagrams (graphviz must installed) -->
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-javadoc-plugin</artifactId>
-                            <version>2.9</version>
-                            <configuration>
-                                
-                                <!-- custom css -->
-                                <stylesheetfile>${basedir}/src/site/resources/css/javadoc.css</stylesheetfile>
-                                        
-                                <!-- custom doclet -->
-                                <!--                                <doclet>org.umlgraph.doclet.UmlGraphDoc</doclet>
-                                <docletArtifact>
-                                    <groupId>org.umlgraph</groupId>
-                                    <artifactId>doclet</artifactId>
-                                    <version>5.1</version>
-                                </docletArtifact>-->
-                                
-                                <!--<additionalparam>-attributes -operations -visibility -types -enumerations -enumconstants -postfixpackage</additionalparam>-->
-                                
-                                <!--                                        <show>private</show>
-                                <additionalparam>-all -constructors</additionalparam>
-                                <useStandardDocletOptions>false</useStandardDocletOptions>-->
-                                        
-                            </configuration>
-                        </plugin>
-                        
-                        <!-- checkstyle -->    
-                        <!--                                <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-checkstyle-plugin</artifactId>
-                        <version>2.9.1</version>
-                        <configuration>-->
-                        <!-- Adopt config location to your needs, or remove configuration entry completly to use default version.
-                        <configLocation>http://stud.hs-heilbronn.de/~nischmid/development/checkstyle-config.xml</configLocation>-->
-                        <!--                                    </configuration>
-                        </plugin>-->
-                        
-                        <!-- findbugs -->
-                        <plugin>
-                            <groupId>org.codehaus.mojo</groupId>
-                            <artifactId>findbugs-maven-plugin</artifactId>
-                            <version>2.5.2</version>
-                            <configuration>
-                                <argLine>-Xmx256m</argLine>
-                                <argLine>-XX:MaxPermSize=256m</argLine>
-                            </configuration>
-                        </plugin>
-                        
-                        <!-- jdepend for package cycles -->
-                        <plugin>
-                            <groupId>org.codehaus.mojo</groupId>
-                            <artifactId>jdepend-maven-plugin</artifactId>
-                        </plugin>
-                        
-                        <!-- pmd -->
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-pmd-plugin</artifactId>
-                            <version>2.7.1</version>
-                            <configuration>
-                                <linkXref>true</linkXref>
-                                <minimumTokens>100</minimumTokens>
-                                <minimumPriority>3</minimumPriority>
-                                <targetJdk>1.5</targetJdk>
-                            </configuration>
-                        </plugin>
-                        
-                        <!-- todo tags check -->
-                        <plugin>
-                            <groupId>org.codehaus.mojo</groupId>
-                            <artifactId>taglist-maven-plugin</artifactId>
-                            <version>2.4</version>
-                        </plugin>
-                        
-                        <!-- javadoc for source code cross references -->
-                        <!--                                <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-jxr-plugin</artifactId>
-                            <version>2.3</version>
-                        </plugin>-->
-                        
-                    </reportPlugins>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>make-site</id> <!-- this is used for inheritance merges -->
-                        <phase>package</phase> <!-- bind to the packaging phase -->
-                        <goals>
-                            <goal>site</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
             
             <!-- makes a zip of the project's binaries -->
             <plugin>
@@ -255,8 +115,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.3.2</version>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                 </configuration>
             </plugin>
             
@@ -317,4 +177,137 @@
         
     </dependencies>
     
+    <!--
+                                                                 
+                                    ,...,,    ,,                  
+     `7MM"""Mq.                   .d' ""db  `7MM                  
+       MM   `MM.                  dM`         MM                  
+       MM   ,M9 `7Mb,od8 ,pW"Wq. mMMmm`7MM    MM  .gP"Ya  ,pP"Ybd 
+       MMmmdM9    MM' "'6W'   `Wb MM    MM    MM ,M'   Yb 8I   `" 
+       MM         MM    8M     M8 MM    MM    MM 8M"""""" `YMMMa. 
+       MM         MM    YA.   ,A9 MM    MM    MM YM.    , L.   I8 
+     .JMML.     .JMML.   `Ybmd9'.JMML..JMML..JMML.`Mbmmd' M9mmmP' 
+
+                                                             
+    -->
+    <profiles>
+        <profile>
+            <id>site</id>
+            
+            <build>
+                
+                <plugins>
+                    
+                    <!-- site configuration -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-site-plugin</artifactId>
+                        <version>3.2</version>
+                        <configuration>
+                            <!--<locales>en,fr</locales>-->
+                            <reportPlugins>
+                                <plugin>
+                                    <groupId>org.apache.maven.plugins</groupId>
+                                    <artifactId>maven-project-info-reports-plugin</artifactId>
+                                    <version>2.4</version>
+                                    <configuration>
+                                        <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
+                                        <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+                                    </configuration>
+                                    <reports>
+                                        <report>index</report>
+                                        <report>project-team</report>
+                                        <!--<report>license</report>-->
+                                        <!--<report>mailing-list</report>-->
+                                        <report>dependencies</report>
+                                        <report>dependency-convergence</report>
+                                        <report>plugin-management</report>
+                                        <!--<report>cim</report>-->
+                                        <!--<report>issue-tracking</report>-->
+                                        <report>scm</report>
+                                        <report>summary</report>
+                                    </reports>
+                                </plugin>
+                                
+                                <!-- tests reporting -->
+                                <plugin>
+                                    <groupId>org.apache.maven.plugins</groupId>
+                                    <artifactId>maven-surefire-report-plugin</artifactId>
+                                    <version>2.12.4</version>
+                                </plugin>
+                                
+                                <!-- unit test code coverage -->
+                                <plugin>
+                                    <groupId>org.jacoco</groupId>
+                                    <artifactId>jacoco-maven-plugin</artifactId>
+                                    <version>0.6.0.201210061924</version>
+                                </plugin>
+                        
+                                <plugin>
+                                    <groupId>org.apache.maven.plugins</groupId>
+                                    <artifactId>maven-javadoc-plugin</artifactId>
+                                    <version>2.9</version>
+                                    <configuration>
+                                
+                                        <!-- custom css -->
+                                        <stylesheetfile>${basedir}/src/site/resources/css/javadoc.css</stylesheetfile>
+                                        
+                                    </configuration>
+                                </plugin>
+                        
+                                <!-- findbugs -->
+                                <plugin>
+                                    <groupId>org.codehaus.mojo</groupId>
+                                    <artifactId>findbugs-maven-plugin</artifactId>
+                                    <version>2.5.2</version>
+                                    <configuration>
+                                        <argLine>-Xmx256m</argLine>
+                                        <argLine>-XX:MaxPermSize=256m</argLine>
+                                    </configuration>
+                                </plugin>
+                        
+                                <!-- jdepend for package cycles -->
+                                <plugin>
+                                    <groupId>org.codehaus.mojo</groupId>
+                                    <artifactId>jdepend-maven-plugin</artifactId>
+                                </plugin>
+                        
+                                <!-- pmd -->
+                                <plugin>
+                                    <groupId>org.apache.maven.plugins</groupId>
+                                    <artifactId>maven-pmd-plugin</artifactId>
+                                    <version>2.7.1</version>
+                                    <configuration>
+                                        <linkXref>true</linkXref>
+                                        <minimumTokens>100</minimumTokens>
+                                        <minimumPriority>3</minimumPriority>
+                                        <targetJdk>1.5</targetJdk>
+                                    </configuration>
+                                </plugin>
+                        
+                                <!-- todo tags check -->
+                                <plugin>
+                                    <groupId>org.codehaus.mojo</groupId>
+                                    <artifactId>taglist-maven-plugin</artifactId>
+                                    <version>2.4</version>
+                                </plugin>
+                        
+                            </reportPlugins>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>make-site</id> 
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>site</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    
+                </plugins>
+                
+            </build>
+        </profile>
+    </profiles>
 </project>

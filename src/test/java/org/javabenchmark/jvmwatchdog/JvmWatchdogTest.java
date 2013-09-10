@@ -89,8 +89,8 @@ public class JvmWatchdogTest {
         Thread t = new Thread(r);
         t.start();
         
-        // sleeps for 3s
-        Thread.sleep(3000);
+        // sleeps for 10s
+        Thread.sleep(10 * 1000);
         
         // JMX client
         System.out.println("Connecting to the watchdog via JMX");

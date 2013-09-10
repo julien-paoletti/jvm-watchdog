@@ -50,8 +50,12 @@ public class HeartbeatProcessor implements Runnable {
             String[] metrics = message.substring(1, message.length() - 1).split(",");
             String pid = extractValue(metrics[0]);
             String hbid = extractValue(metrics[1]);
+            String mem = extractValue(metrics[2]);
+            String slow = extractValue(metrics[3]);
             Logger.info("pid={0}", pid);
             Logger.info("hbid={0}", hbid);
+            Logger.info("mem={0}", mem);
+            Logger.info("slow={0}", slow);
 
         } catch (IOException e) {
             Logger.error("An error occurs when reading agent's message ..", e);

@@ -287,6 +287,7 @@ public class JvmWatchdog implements JvmWatchdogMXBean {
     /**
      * shutdowns listening and processing services, closes server socket and stops waiting.
      */
+    @Override
     public void stop() {
 
         // stops listening service

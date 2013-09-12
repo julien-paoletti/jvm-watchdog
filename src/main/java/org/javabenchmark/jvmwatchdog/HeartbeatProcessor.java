@@ -1,6 +1,8 @@
 package org.javabenchmark.jvmwatchdog;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
@@ -52,13 +54,46 @@ public class HeartbeatProcessor implements Runnable {
             String hbid = extractValue(metrics[1]);
             String mem = extractValue(metrics[2]);
             String slow = extractValue(metrics[3]);
-            Logger.info("pid={0}", pid);
-            Logger.info("hbid={0}", hbid);
-            Logger.info("mem={0}", mem);
-            Logger.info("slow={0}", slow);
+
+//            Logger.info("pid={0}", pid);
+//            Logger.info("hbid={0}", hbid);
+//            Logger.info("mem={0}", mem);
+//            Logger.info("slow={0}", slow);
+
+            // metrics directory
+            File metricsDirectory = new File("metrics");
+            if (!metricsDirectory.exists()) {
+                metricsDirectory.mkdirs();
+            }
+
+            // metrics file
+            File metricsFile = new File(pid + ".csv");
+            boolean isNewFile = !metricsFile.exists();
+            
+            // the stream used to write into the metrics file
+            FileOutputStream fout = new FileOutputStream(metricsFile, true);
+            
+            if (isNewFile) {
+                // appends csv header
+                fout.write("pid,hbid,mem,slow\n".getBytes());
+            }
+            
+            // builds the metrics line to append
+            StringBuilder sb = new StringBuilder(pid);
+            sb.append(',').append(hbid);
+            sb.append(',').append(mem);
+            sb.append(',').append(slow).append('\n');
+            String metricsLine = sb.toString();
+            
+            // appends a metrics line into a pid dedicated file
+            fout.write(metricsLine.getBytes());
+            
+            // flushes & closes stream
+            fout.flush();
+            fout.close();
 
         } catch (IOException e) {
-            Logger.error("An error occurs when reading agent's message ..", e);
+            Logger.error("An error occurs when processing agent's message ..", e);
         }
     }
 

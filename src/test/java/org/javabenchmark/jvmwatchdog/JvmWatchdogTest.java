@@ -6,6 +6,7 @@ import com.sun.tools.attach.VirtualMachineDescriptor;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Properties;
@@ -21,7 +22,9 @@ import org.junit.Test;
 import static org.fest.assertions.api.Assertions.*;
 
 /**
- * JvmWatchdog Test.
+ * Starts a watchdog that monitors the JVM that is running this test for 10
+ * seconds. Then stops the watchdog and controls that a dedicated metrics file
+ * exists.
  *
  * @author julien.paoletti@gmail.com
  */
@@ -65,7 +68,7 @@ public class JvmWatchdogTest {
 
         // controls that a JVM was found
         assertThat(jvmWasFound).isTrue();
-        
+
         final VirtualMachine theVm = vm;
 
         // searches for the agent jar into the target directory
@@ -76,6 +79,8 @@ public class JvmWatchdogTest {
                 return name.startsWith("jvm-watchdog") && name.endsWith(".jar");
             }
         });
+        assertThat(jarNames).isNotNull();
+        assertThat(jarNames).hasSize(1);
 
         // starts the watchdog against the JVM in a dedicated thread to avoid the wait
         Runnable r = new Runnable() {
@@ -88,24 +93,28 @@ public class JvmWatchdogTest {
         };
         Thread t = new Thread(r);
         t.start();
-        
+
         // sleeps for 10s
         Thread.sleep(10 * 1000);
-        
-        // JMX client
+
+        // JMX client to connect to the watchdog
         System.out.println("Connecting to the watchdog via JMX");
         JMXServiceURL url = new JMXServiceURL("service:jmx:rmi:///jndi/rmi://:9999/jmxrmi");
         JMXConnector jmxc = JMXConnectorFactory.connect(url, null);
         MBeanServerConnection mbsc = jmxc.getMBeanServerConnection();
 
-        // stops the watchdog
+        // stops the watchdog through JMX
         System.out.println("Stopping watchdog via JMX");
         ObjectName mbeanName = new ObjectName(JvmWatchdog.MXBEAN_NAME);
         JvmWatchdogMXBean mbeanProxy = JMX.newMXBeanProxy(mbsc, mbeanName, JvmWatchdogMXBean.class, true);
         mbeanProxy.stop();
 
-        // closes JMX connectino
+        // closes JMX connection
         System.out.println("Closing connection");
         jmxc.close();
+
+        // checks that metrics file exists
+        File metricsFile = new File(vm.id() + ".csv");
+        assertThat(metricsFile).exists();
     }
 }

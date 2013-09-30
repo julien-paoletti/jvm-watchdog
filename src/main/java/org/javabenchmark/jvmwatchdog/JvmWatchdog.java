@@ -36,10 +36,12 @@ public class JvmWatchdog implements JvmWatchdogMXBean {
     public static final String AGENT_OPTION = "agent";
     public static final String PID_OPTION = "pid";
     public static final String PORT_OPTION = "port";
+    public static final String METRICS_DIR_OPTION = "metrics-dir";
     public static final String MXBEAN_NAME = "org.javabenchmark.jvmwatchdog:type=JvmWatchdog";
     private File agentJarFile;
     private String[] pids;
     private int port = 10001;
+    private String metricsDir = "metrics";
     private ServerSocket serverSocket;
     private ExecutorService listeningService;
     private ExecutorService heartbeatService;
@@ -133,6 +135,7 @@ public class JvmWatchdog implements JvmWatchdogMXBean {
         parser.accepts(AGENT_OPTION).withRequiredArg();
         parser.accepts(PID_OPTION).withRequiredArg();
         parser.accepts(PORT_OPTION).withOptionalArg();
+        parser.accepts(METRICS_DIR_OPTION).withOptionalArg();
         OptionSet options = parser.parse(args);
 
         // options
@@ -163,11 +166,17 @@ public class JvmWatchdog implements JvmWatchdogMXBean {
         if (options.has(PORT_OPTION) && options.hasArgument(PORT_OPTION)) {
             port = (Integer) options.valueOf(PORT_OPTION);
         }
+        
+        // checks metrics directory
+        if (options.has(METRICS_DIR_OPTION) && options.hasArgument(METRICS_DIR_OPTION)) {
+            metricsDir = (String) options.valueOf(METRICS_DIR_OPTION);
+        }
 
         Logger.info("---------------");
         Logger.info("Process Id(s)  : {0}", literalPids);
         Logger.info("Agent JAR file : {0}", agentJarFile.getAbsolutePath());
-        Logger.info("Watchdog port  :  {0}", port);
+        Logger.info("Watchdog port  : {0}", port);
+        Logger.info("Metrics dir.   : {0}", metricsDir);
         Logger.info("---------------");
         return true;
     }
@@ -324,5 +333,9 @@ public class JvmWatchdog implements JvmWatchdogMXBean {
                 Logger.warn("Can not wait till the end of the service ..");
             }
         }
+    }
+
+    public String getMetricsDirectory() {
+        return metricsDir;
     }
 }

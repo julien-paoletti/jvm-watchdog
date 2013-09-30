@@ -1,1 +1,1 @@
-java -Dcom.sun.management.jmxremote.port=9999 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -jar lib/${project.build.finalName}.jar
+java -Dcom.sun.management.jmxremote.port=9999 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -jar lib/${project.build.finalName}.jar --agent lib/${project.build.finalName}.jar --pid $1

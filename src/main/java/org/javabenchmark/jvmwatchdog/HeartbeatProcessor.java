@@ -61,13 +61,13 @@ public class HeartbeatProcessor implements Runnable {
 //            Logger.info("slow={0}", slow);
 
             // metrics directory
-            File metricsDirectory = new File("metrics");
+            File metricsDirectory = new File(this.watchDog.getMetricsDirectory());
             if (!metricsDirectory.exists()) {
                 metricsDirectory.mkdirs();
             }
 
             // metrics file
-            File metricsFile = new File(pid + ".csv");
+            File metricsFile = new File(metricsDirectory, pid + ".csv");
             boolean isNewFile = !metricsFile.exists();
             
             // the stream used to write into the metrics file
@@ -93,7 +93,7 @@ public class HeartbeatProcessor implements Runnable {
             fout.close();
 
         } catch (IOException e) {
-            Logger.error("An error occurs when processing agent's message ..", e);
+            Logger.error("An error occurs when processing agent's message: {0}", e.getMessage());
         }
     }
 

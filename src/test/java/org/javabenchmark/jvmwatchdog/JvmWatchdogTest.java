@@ -24,6 +24,7 @@ import static org.fest.assertions.api.Assertions.*;
 public class JvmWatchdogTest {
 
     public static final String MY_JVM_VALUE = "myJVM";
+    public static final String METRICS_DIRECTORY = "target/metrics";
 
     @Test
     public void shouldMonitorThisJvm() throws MalformedURLException, IOException, MalformedObjectNameException, InterruptedException {
@@ -80,7 +81,12 @@ public class JvmWatchdogTest {
             @Override
             public void run() {
                 System.out.println("Starting the watchdog in a dedicated thread ..");
-                String[] args = new String[]{"--" + JvmWatchdog.AGENT_OPTION, "target/" + jarNames[0], "--" + JvmWatchdog.PID_OPTION, theVm.id()};
+                String[] args = new String[]{"--" + JvmWatchdog.METRICS_DIR_OPTION, METRICS_DIRECTORY, "--" + JvmWatchdog.AGENT_OPTION, "target/" + jarNames[0], "--" + JvmWatchdog.PID_OPTION, theVm.id()};
+                System.out.println("With Command line options:");
+                for (int i = 0; i < args.length; i++) {
+                    System.out.print(args[i] + " ");
+                }
+                System.out.println();
                 JvmWatchdog.main(args);
             }
         };
@@ -94,7 +100,7 @@ public class JvmWatchdogTest {
         JvmWatchdogShutdown.main(null);
 
         // checks that metrics file exists
-        File metricsFile = new File(vm.id() + ".csv");
+        File metricsFile = new File(METRICS_DIRECTORY, vm.id() + ".csv");
         assertThat(metricsFile).exists();
     }
 }

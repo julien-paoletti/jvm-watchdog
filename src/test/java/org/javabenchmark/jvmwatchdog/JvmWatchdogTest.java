@@ -6,18 +6,11 @@ import com.sun.tools.attach.VirtualMachineDescriptor;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
-import javax.management.JMX;
-import javax.management.MBeanServerConnection;
 import javax.management.MalformedObjectNameException;
-import javax.management.ObjectName;
-import javax.management.remote.JMXConnector;
-import javax.management.remote.JMXConnectorFactory;
-import javax.management.remote.JMXServiceURL;
 import org.junit.Test;
 import static org.fest.assertions.api.Assertions.*;
 
@@ -97,21 +90,8 @@ public class JvmWatchdogTest {
         // sleeps for 10s
         Thread.sleep(10 * 1000);
 
-        // JMX client to connect to the watchdog
-        System.out.println("Connecting to the watchdog via JMX");
-        JMXServiceURL url = new JMXServiceURL("service:jmx:rmi:///jndi/rmi://:9999/jmxrmi");
-        JMXConnector jmxc = JMXConnectorFactory.connect(url, null);
-        MBeanServerConnection mbsc = jmxc.getMBeanServerConnection();
-
-        // stops the watchdog through JMX
-        System.out.println("Stopping watchdog via JMX");
-        ObjectName mbeanName = new ObjectName(JvmWatchdog.MXBEAN_NAME);
-        JvmWatchdogMXBean mbeanProxy = JMX.newMXBeanProxy(mbsc, mbeanName, JvmWatchdogMXBean.class, true);
-        mbeanProxy.stop();
-
-        // closes JMX connection
-        System.out.println("Closing connection");
-        jmxc.close();
+        // shutdown watchdog
+        JvmWatchdogShutdown.main(null);
 
         // checks that metrics file exists
         File metricsFile = new File(vm.id() + ".csv");

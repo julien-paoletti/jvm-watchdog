@@ -10,6 +10,6 @@ public interface JvmWatchdogMXBean {
     /**
      * closes server socket, shutdowns services and stops waiting.
      */
-    public void stop();
+    public void shutdown();
     
 }

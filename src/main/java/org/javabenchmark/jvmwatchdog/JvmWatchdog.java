@@ -10,7 +10,6 @@ import java.lang.management.ManagementFactory;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -69,7 +68,7 @@ public class JvmWatchdog implements JvmWatchdogMXBean {
         try {
             ObjectName mxbeanName = new ObjectName(MXBEAN_NAME);
             mbs.registerMBean(watchDog, mxbeanName);
-            Logger.info("MxBean registred.");
+            Logger.debug("MxBean registred.");
         } catch (InstanceAlreadyExistsException ex) {
             Logger.error(ex);
         } catch (MBeanRegistrationException ex) {
@@ -80,7 +79,7 @@ public class JvmWatchdog implements JvmWatchdogMXBean {
             Logger.error(ex);
         }
 
-        // starts the watchdog and waits
+        // starts the watchdog and waits for agent
         if (watchDog.processJvmOptions(args)) {
             if (watchDog.listenToAgents()) {
                 watchDog.loadAgentIntoJvms();
@@ -165,21 +164,22 @@ public class JvmWatchdog implements JvmWatchdogMXBean {
             port = (Integer) options.valueOf(PORT_OPTION);
         }
 
-        Logger.info("Options\n---------------");
-        Logger.info("Process Id(s) : {0}", literalPids);
-        Logger.info("Agent JAR file: {0}", agentJarFile.getAbsolutePath());
-        Logger.info("Watch dog port: {0}", port);
+        Logger.info("---------------");
+        Logger.info("Process Id(s)  : {0}", literalPids);
+        Logger.info("Agent JAR file : {0}", agentJarFile.getAbsolutePath());
+        Logger.info("Watchdog port  :  {0}", port);
+        Logger.info("---------------");
         return true;
     }
 
     /**
-     * adds a shutdown hook to stop on exit.
+     * adds a shutdown hook to shutdown on exit.
      */
     private void attachShutDownHook() {
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {
-                stop();
+                shutdown();
             }
         });
         Logger.debug("Shutdown hook added.");
@@ -218,7 +218,7 @@ public class JvmWatchdog implements JvmWatchdogMXBean {
             @Override
             public void run() {
 
-                Logger.info("Listening to agents on port {0} ..", port);
+                Logger.info("Listening to agents ..");
                 Socket clientSocket = null;
 
                 // listening loop
@@ -259,7 +259,7 @@ public class JvmWatchdog implements JvmWatchdogMXBean {
                 StringBuilder agentOptions = new StringBuilder();
                 agentOptions.append(pid).append(",").append(port);
                 vm.loadAgent(agentJarFile.getAbsolutePath(), agentOptions.toString());
-                Logger.info("The Agent was loaded into JVM with pid {0} ({1})", pid, vm.provider().name());
+                Logger.info("An Agent was loaded into JVM with pid {0} ({1})", pid, vm.provider().name());
                 vm.detach();
 
             } catch (AttachNotSupportedException ex) {
@@ -289,7 +289,7 @@ public class JvmWatchdog implements JvmWatchdogMXBean {
      * shutdowns listening and processing services, closes server socket and stops waiting.
      */
     @Override
-    public void stop() {
+    public void shutdown() {
 
         // stops listening service
         Logger.debug("Stopping the listening service ..");

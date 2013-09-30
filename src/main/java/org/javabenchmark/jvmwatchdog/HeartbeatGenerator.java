@@ -12,7 +12,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
 import org.pmw.tinylog.Logger;
 
 /**
@@ -80,7 +79,7 @@ public class HeartbeatGenerator {
                 sendHeartbeat();
 
                 // updates time
-                previousTime = System.currentTimeMillis();;
+                previousTime = System.currentTimeMillis();
             }
         }, 1, 1, TimeUnit.SECONDS);
     }

@@ -42,11 +42,18 @@ public class HeartbeatProcessor implements Runnable {
             // reads agent's message
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String message = in.readLine();
+            
             Logger.debug("Heartbeat Message received: {0}", message);
 
             // closes connection
             in.close();
             socket.close();
+            
+            // checks message in case of agent IO failure
+            if (message == null) {
+                Logger.error("Heartbeat message is null ..");
+                return ;
+            }
 
             // extracts metrics from agent's message
             String[] metrics = message.substring(1, message.length() - 1).split(",");

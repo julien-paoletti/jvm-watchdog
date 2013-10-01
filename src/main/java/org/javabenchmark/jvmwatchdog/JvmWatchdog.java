@@ -268,11 +268,11 @@ public class JvmWatchdog implements JvmWatchdogMXBean {
                 StringBuilder agentOptions = new StringBuilder();
                 agentOptions.append(pid).append(",").append(port);
                 vm.loadAgent(agentJarFile.getAbsolutePath(), agentOptions.toString());
-                Logger.info("An Agent was loaded into JVM with pid {0} ({1})", pid, vm.provider().name());
+                Logger.info("An agent was loaded into JVM with pid {0} ({1})", pid, vm.provider().name());
                 vm.detach();
 
             } catch (AttachNotSupportedException ex) {
-                Logger.error("The JVM with pid {0} does not support dynamic attach !");
+                Logger.error("The JVM with pid {0} does not support dynamic attach !", pid);
             } catch (IOException ex) {
                 Logger.error("An IO error occurs when attaching to JVM with pid {0} because: {1}", pid, ex.getMessage());
             } catch (AgentLoadException ex) {

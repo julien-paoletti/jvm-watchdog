@@ -71,6 +71,7 @@
                         <configuration>
                             <archive>
                                 <manifestEntries>
+                                    <!-- to enable agent -->
                                     <Agent-Class>org.javabenchmark.jvmwatchdog.Agent</Agent-Class>
                                 </manifestEntries>
                             </archive>
@@ -78,16 +79,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <!-- executes test with java agent options of the JVM -->
-            <!--            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.14</version>
-                <configuration>
-                    <argLine>-javaagent:target/${project.build.finalName}.jar</argLine>
-                </configuration>
-            </plugin>-->
             
             <!-- copies all dependencies into the target/lib -->
             <plugin>
@@ -100,13 +91,13 @@
                         <phase>package</phase>
                         <goals>
                             <goal>copy-dependencies</goal>
+                            <goal>build-classpath</goal>
                         </goals>
                         <configuration>
                             <outputDirectory>${project.build.directory}/lib</outputDirectory>
                             <includeScope>runtime</includeScope>
-<!--                            <overWriteReleases>false</overWriteReleases>
-                            <overWriteSnapshots>false</overWriteSnapshots>
-                            <overWriteIfNewer>true</overWriteIfNewer>-->
+                            <outputProperty>jvm-classpath</outputProperty>
+                            <prefix>lib</prefix>
                         </configuration>
                     </execution>
                 </executions>

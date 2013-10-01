@@ -1,1 +1,1 @@
-java -Dcom.sun.management.jmxremote.port=9999 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -jar lib/${project.build.finalName}.jar --agent lib/${project.build.finalName}.jar --pid $1
+java -cp $JAVA_HOME/lib/tools.jar:${jvm-classpath}:lib/${project.build.finalName}.jar -Dcom.sun.management.jmxremote.port=9999 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false org.javabenchmark.jvmwatchdog.JvmWatchdog --agent lib/${project.build.finalName}.jar --pid $1

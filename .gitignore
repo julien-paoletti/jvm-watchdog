@@ -1,2 +1,4 @@
 /jvm-watchdog.log
 /target/
+/nb-configuration.xml
+/nbactions.xml

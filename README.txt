@@ -5,3 +5,17 @@
                                                         |___/   v${project.version}
 
 This is a tool that monitors a given JVM process in order to detect any failures that may occur.
+
+----------------
+Run the watchdog
+----------------
+
+Warning: The JAVA HOME variable must be set before running the watchdog.
+
+
+On unix, executes: ./run-with-unsecured-jmx.sh
+On windows, executes: run-with-unsecured-jmx.bat
+
+In both cases, the script starts the watchdog with JMX enabled, but without any
+security constrol when accessing the watchdog through JMX (i.e anonymous mode,
+every one can connect).

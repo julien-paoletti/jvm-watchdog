@@ -5,14 +5,12 @@ import java.io.PrintWriter;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
 import java.lang.management.MemoryUsage;
-import java.net.ConnectException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
-import org.pmw.tinylog.Logger;
 
 /**
  * A component that is started by the watchdog agent to send heartbeat to the
@@ -43,6 +41,14 @@ public class HeartbeatGenerator {
      * the service that launches heartbeat generation every 1000 millis.
      */
     private ScheduledExecutorService scheduler;
+    /**
+     * try to send heartbeat 10 times. Stops after.
+     */
+    public static final int MAX_FAILURES_COUNT = 10;
+    /**
+     * to sum failures.
+     */
+    private int failureCount = 0;
 
     /**
      * builds a new heartbeat generator.
@@ -90,8 +96,6 @@ public class HeartbeatGenerator {
      */
     private void sendHeartbeat() {
 
-        long startTime = System.currentTimeMillis();
-        
         // the socket to the watchdog
         Socket socket = null;
 
@@ -118,31 +122,43 @@ public class HeartbeatGenerator {
             // establishes a connexion with the watchdog
             socket = new Socket("localhost", port);
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-            Logger.debug("Agent for pid {0} established a connection with watchdog on port: {1}", pid, port);
 
             // sends message
             out.println(message.toString());
-            Logger.debug("Message sent to watchdog: {0}", message.toString());
             out.close();
 
         } catch (UnknownHostException ex) {
-            Logger.error(ex);
-        } catch (ConnectException ex) {
-            Logger.error("Can not connect to the watchdog .. Must be off");
+            handleGenericFailure(ex);
         } catch (IOException ex) {
-            Logger.error(ex);
+            handleGenericFailure(ex);
         } finally {
             // closes connection
             if (socket != null) {
                 try {
                     socket.close();
                 } catch (IOException ex) {
-                    Logger.error("Can not close the socket", ex);
+                    System.err.println("[Watchdog agent] Can not close the socket: " + ex.getMessage());
                 }
             }
         }
-        
-        long endTime = System.currentTimeMillis();
-        Logger.debug("Send heartbeat took {0} ms", endTime - startTime);
+
+        // decides if the generator continues when facing failures
+        if (failureCount >= MAX_FAILURES_COUNT) {
+            System.err.println("[Watchdog agent] Too many failures, stopping ..");
+            stop();
+        }
+    }
+
+    /**
+     * stops sending heartbeat to the watchdog. It's intended when communication
+     * fails between agent and watchdog.
+     */
+    private void stop() {
+        scheduler.shutdown();
+    }
+
+    private void handleGenericFailure(IOException ex) {
+        failureCount++;
+        System.err.println("[Watchdog agent] Error when communicating with the watchdog: " + ex.getMessage());
     }
 }

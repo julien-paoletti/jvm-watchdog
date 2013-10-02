@@ -234,6 +234,7 @@ public class JvmWatchdog implements JvmWatchdogMXBean {
                 while (mustListen.get()) {
                     try {
                         clientSocket = serverSocket.accept();
+                        Logger.debug("Incoming heartbeat ..");
                     } catch (IOException e) {
 
                         // only logs error if the watchdog is listening
@@ -242,8 +243,8 @@ public class JvmWatchdog implements JvmWatchdogMXBean {
                         }
                     }
 
-                    // processes heart beat
-                    if (clientSocket != null) {
+                    // only processes heartbeat if the service is up
+                    if (clientSocket != null && mustListen.get()) {
                         heartbeatService.execute(new HeartbeatProcessor(clientSocket, JvmWatchdog.this));
                     }
                 }

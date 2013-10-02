@@ -140,6 +140,10 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.16</version>
                 <configuration>
+                    <!-- runs 1 test at time because of JMX listening on the 9999 port -->
+                    <forkCount>1</forkCount>
+                    <!-- dedicated JVM for each test -->
+                    <reuseForks>false</reuseForks>
                     <!-- enable JMX on port 9999 without authentication -->
                     <argLine>-Dcom.sun.management.jmxremote.port=9999 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false</argLine>
                 </configuration>
@@ -189,6 +193,14 @@
             <groupId>org.easytesting</groupId>
             <artifactId>fest-assert-core</artifactId>
             <version>2.0M10</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <!-- fault injection -->
+        <dependency>
+            <groupId>org.jboss.byteman</groupId>
+            <artifactId>byteman-bmunit</artifactId>
+            <version>2.1.2</version>
             <scope>test</scope>
         </dependency>
         

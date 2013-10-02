@@ -1,0 +1,1 @@
+"%JAVA_HOME%"\bin\java -cp lib\${project.build.finalName}.jar org.javabenchmark.jvmwatchdog.JvmWatchdogShutdown

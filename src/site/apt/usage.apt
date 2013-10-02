@@ -20,6 +20,8 @@ Usage
     
     You have to provide the pid of the JVM that you want to monitor to the script.
 
+    Warning: The <<JAVA_HOME>> environment variable must be set before running any script.
+
 ** Unix
 
     Execute the sh script:
@@ -38,3 +40,19 @@ run-with-unsecured-jmx.bat <pid>
 
     Each script launches the JVM Watchdog with JMX enabled on port 9999, but without any
     authentication.
+
+* Shutdown
+
+    To shutdown the watchdog, execute the shutdown script:
+
+** Unix
+
++------------------------------------------------------
+./shutdown.sh
++------------------------------------------------------
+
+** Windows
+
++------------------------------------------------------
+shutdown.bat
++------------------------------------------------------

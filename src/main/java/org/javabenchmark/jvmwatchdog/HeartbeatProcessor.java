@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.util.logging.Level;
 import static org.javabenchmark.jvmwatchdog.HeartbeatGenerator.HEARTBEAT_ENCODING;
 import org.pmw.tinylog.Logger;
 
@@ -39,21 +40,20 @@ public class HeartbeatProcessor implements Runnable {
     @Override
     public void run() {
 
+        FileOutputStream fout = null;
+
         try {
             // reads agent's message
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream(), HEARTBEAT_ENCODING));
             String message = in.readLine();
+            in.close();
             
             Logger.debug("Heartbeat message received: {0}", message);
 
-            // closes connection
-            in.close();
-            socket.close();
-            
             // checks message in case of agent IO failure
             if (message == null) {
                 Logger.error("Heartbeat message is null ..");
-                return ;
+                return;
             }
 
             // extracts metrics from agent's message
@@ -71,37 +71,57 @@ public class HeartbeatProcessor implements Runnable {
             // metrics directory
             File metricsDirectory = new File(this.watchDog.getMetricsDirectory());
             if (!metricsDirectory.exists()) {
-                metricsDirectory.mkdirs();
+                if(!metricsDirectory.mkdirs()) {
+                    Logger.error("Failed to make the metrics directory ..");
+                    Logger.error("Metrics sent are: {0}", message);
+                    return ;
+                }
             }
 
             // metrics file
             File metricsFile = new File(metricsDirectory, pid + ".csv");
             boolean isNewFile = !metricsFile.exists();
-            
+
             // the stream used to write into the metrics file
-            FileOutputStream fout = new FileOutputStream(metricsFile, true);
-            
+            fout = new FileOutputStream(metricsFile, true);
+
             if (isNewFile) {
                 // appends csv header
                 fout.write("pid,hbid,mem,slow\n".getBytes(HEARTBEAT_ENCODING));
             }
-            
+
             // builds the metrics line to append
             StringBuilder sb = new StringBuilder(pid);
             sb.append(',').append(hbid);
             sb.append(',').append(mem);
             sb.append(',').append(slow).append('\n');
             String metricsLine = sb.toString();
-            
+
             // appends a metrics line into a pid dedicated file
             fout.write(metricsLine.getBytes(HEARTBEAT_ENCODING));
-            
-            // flushes & closes stream
             fout.flush();
-            fout.close();
 
         } catch (IOException e) {
             Logger.error("An error occurs when processing agent's message: {0}", e.getMessage());
+        } finally {
+
+            // closes stream
+            if (fout != null) {
+                try {
+                    fout.close();
+                } catch (IOException ex) {
+                    Logger.error("Can not close the output stream: {0}", ex.getMessage());
+                }
+            }
+
+            // closes socket
+            if (socket != null) {
+                try {
+                    socket.close();
+                } catch (IOException ex) {
+                    Logger.error("Can not close the output stream: {0}", ex.getMessage());
+                }
+            }
         }
     }
 

@@ -24,7 +24,7 @@
     </bannerRight>-->
     <body>
         <links>
-            <item name="Blog JavaBenchmark" href="http://blog.javabenchmark.org"/>
+            <item name="Blog JavaBenchmark" href="http://blog.javabenchmark.org/"/>
         </links>
 
         <menu name="${project.name}">

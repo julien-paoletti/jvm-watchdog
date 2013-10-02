@@ -3,4 +3,9 @@ JVM WatchDog
 
 This is a tool that monitors a given JVM process in order to detect any failures that may occur.
 
+JVM Watchdog dynamically attaches java agents to JVMs, and agents send heartbeats
+every second to the watchdog. Each heartbeat contains monitoring data that are stored by the watchdog
+within CSV files in a dedicated directory.
+
+
 [![Build Status](https://travis-ci.org/julien-paoletti/jvm-watchdog.png)](http://travis-ci.org/julien-paoletti/jvm-watchdog)

@@ -7,10 +7,13 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>JVM WatchDog</name>
+    <name>JVM Watchdog</name>
     <url>http://blog.javabenchmark.org</url>
     <description>
         This is a tool that monitors a given JVM process in order to detect any failures that may occur.
+        JVM Watchdog dynamically attaches java agents to JVMs, and agents send heartbeats
+        every second to the watchdog. Each heartbeat contains monitoring data that are stored by the watchdog
+        within CSV files in a dedicated directory.
     </description>
     
     <developers>
@@ -21,6 +24,12 @@
         </developer>
     </developers>
 
+    <scm>
+        <url>https://github.com/julien-paoletti/jvm-watchdog</url>
+        <connection>scm:git:ssh://git@github.com/julien-paoletti/jvm-watchdog.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/julien-paoletti/jvm-watchdog.git</developerConnection>
+    </scm>
+    
     <!--
                                                                                         
                                                                     ,,                  
@@ -321,6 +330,12 @@
                                     <groupId>org.jacoco</groupId>
                                     <artifactId>jacoco-maven-plugin</artifactId>
                                     <version>${jacoco-version}</version>
+                                    <configuration>
+                                        <!-- Sets the path to the file which contains the execution data. -->
+                                        <dataFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</dataFile>
+                                        <!-- Sets the output directory for the code coverage report. -->
+                                        <outputDirectory>${project.reporting.outputDirectory}/jacoco-ut</outputDirectory>
+                                    </configuration>
                                 </plugin>
                         
                                 <plugin>

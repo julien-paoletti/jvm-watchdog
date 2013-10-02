@@ -2,12 +2,39 @@
 
 Usage
 
-    This section shows how to use this tool.
+    This section shows how to use the JVM watchdog.
 
-    Every command must be executed in the installation directory.
+* Installation
 
-* Simple usage
+    [[1]] Download the distribution archive
+
+    [[2]] Unzip the downloaded file
+
+    [[3]] Open the distribution directory
+   
+
+* Run
+    
+    Every command must be executed in the installation directory. Next, run the
+    script that matches to your system.
+    
+    You have to provide the pid of the JVM that you want to monitor to the script.
+
+** Unix
+
+    Execute the sh script:
 
 +------------------------------------------------------
-./run.sh ...
+./run-with-unsecured-jmx.sh <pid>
 +------------------------------------------------------
+
+** Windows
+
+    Execute the bat script:
+
++------------------------------------------------------
+run-with-unsecured-jmx.bat <pid>
++------------------------------------------------------
+
+    Each script launches the JVM Watchdog with JMX enabled on port 9999, but without any
+    authentication.

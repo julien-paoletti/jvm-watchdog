@@ -24,7 +24,7 @@
     </bannerRight>-->
     <body>
         <links>
-            <item name="CGI" href="http://cgi.com/"/>
+            <item name="Blog JavaBenchmark" href="http://blog.javabenchmark.org"/>
         </links>
 
         <menu name="${project.name}">

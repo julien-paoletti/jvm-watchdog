@@ -83,7 +83,7 @@ public class HeartbeatProcessor implements Runnable {
             
             if (isNewFile) {
                 // appends csv header
-                fout.write("pid,hbid,mem,slow\n".getBytes());
+                fout.write("pid,hbid,mem,slow\n".getBytes(HEARTBEAT_ENCODING));
             }
             
             // builds the metrics line to append
@@ -94,7 +94,7 @@ public class HeartbeatProcessor implements Runnable {
             String metricsLine = sb.toString();
             
             // appends a metrics line into a pid dedicated file
-            fout.write(metricsLine.getBytes());
+            fout.write(metricsLine.getBytes(HEARTBEAT_ENCODING));
             
             // flushes & closes stream
             fout.flush();

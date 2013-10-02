@@ -1,12 +1,16 @@
 package org.javabenchmark.jvmwatchdog;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.Writer;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
 import java.lang.management.MemoryUsage;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.nio.charset.Charset;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
@@ -19,6 +23,7 @@ import java.util.concurrent.TimeUnit;
  * @author julien.paoletti@gmail.com
  */
 public class HeartbeatGenerator {
+    public static final Charset HEARTBEAT_ENCODING = Charset.forName("UTF-8");
 
     /**
      * process id
@@ -121,7 +126,8 @@ public class HeartbeatGenerator {
 
             // establishes a connexion with the watchdog
             socket = new Socket("localhost", port);
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            Writer writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), HEARTBEAT_ENCODING));
+            PrintWriter out = new PrintWriter(writer, true);
 
             // sends message
             out.println(message.toString());

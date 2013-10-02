@@ -47,7 +47,7 @@ public class HeartbeatProcessor implements Runnable {
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream(), HEARTBEAT_ENCODING));
             String message = in.readLine();
             in.close();
-            
+
             Logger.debug("Heartbeat message received: {0}", message);
 
             // checks message in case of agent IO failure
@@ -70,12 +70,10 @@ public class HeartbeatProcessor implements Runnable {
 
             // metrics directory
             File metricsDirectory = new File(this.watchDog.getMetricsDirectory());
-            if (!metricsDirectory.exists()) {
-                if(!metricsDirectory.mkdirs()) {
-                    Logger.error("Failed to make the metrics directory ..");
-                    Logger.error("Metrics sent are: {0}", message);
-                    return ;
-                }
+            if (!metricsDirectory.exists() && !metricsDirectory.mkdirs()) {
+                Logger.error("Failed to make the metrics directory ..");
+                Logger.error("Metrics sent are: {0}", message);
+                return;
             }
 
             // metrics file

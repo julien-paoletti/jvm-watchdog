@@ -82,11 +82,9 @@ public class JvmWatchdog implements JvmWatchdogMXBean {
         }
 
         // starts the watchdog and waits for agent
-        if (watchDog.processJvmOptions(args)) {
-            if (watchDog.listenToAgents()) {
-                watchDog.loadAgentIntoJvms();
-                watchDog.await();
-            }
+        if (watchDog.processJvmOptions(args) && watchDog.listenToAgents()) {
+            watchDog.loadAgentIntoJvms();
+            watchDog.await();
         }
 
         // the wait is over
@@ -96,14 +94,6 @@ public class JvmWatchdog implements JvmWatchdogMXBean {
     private static String getValueOfOption(OptionSet options, String option) {
         if (checkOptionAndArgument(options, option)) {
             return (String) options.valueOf(option);
-        } else {
-            return null;
-        }
-    }
-
-    private static List<String> getValuesOfOption(OptionSet options, String option) {
-        if (checkOptionAndArgument(options, option)) {
-            return (List<String>) options.valuesOf(option);
         } else {
             return null;
         }
@@ -166,7 +156,7 @@ public class JvmWatchdog implements JvmWatchdogMXBean {
         if (options.has(PORT_OPTION) && options.hasArgument(PORT_OPTION)) {
             port = (Integer) options.valueOf(PORT_OPTION);
         }
-        
+
         // checks metrics directory
         if (options.has(METRICS_DIR_OPTION) && options.hasArgument(METRICS_DIR_OPTION)) {
             metricsDir = (String) options.valueOf(METRICS_DIR_OPTION);
@@ -296,7 +286,8 @@ public class JvmWatchdog implements JvmWatchdogMXBean {
     }
 
     /**
-     * shutdowns listening and processing services, closes server socket and stops waiting.
+     * shutdowns listening and processing services, closes server socket and
+     * stops waiting.
      */
     @Override
     public void shutdown() {
@@ -305,7 +296,7 @@ public class JvmWatchdog implements JvmWatchdogMXBean {
         Logger.debug("Stopping the listening service ..");
         mustListen.set(false);
         stopService(listeningService);
-        
+
         Logger.debug("Stopping heartbeat service ..");
         stopService(heartbeatService);
 

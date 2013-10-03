@@ -23,8 +23,8 @@ import java.util.concurrent.TimeUnit;
  * @author julien.paoletti@gmail.com
  */
 public class HeartbeatGenerator {
-    public static final Charset HEARTBEAT_ENCODING = Charset.forName("UTF-8");
 
+    public static final Charset HEARTBEAT_ENCODING = Charset.forName("UTF-8");
     /**
      * process id
      */
@@ -106,12 +106,17 @@ public class HeartbeatGenerator {
 
         try {
 
-            // sends a JSON message with pid, hbid, mem, slowness %
+            // sends a JSON message with time, pid, hbid, mem, slowness
             StringBuilder message = new StringBuilder("{");
 
             // appends process id and heartbeat id
-            message.append("pid:").append(pid)
-                    .append(",hbid:").append(heartbeatSequence++);
+            message.append("pid:").append(pid);
+
+            // append timestamp
+            message.append(",time:").append(System.currentTimeMillis());
+
+            // appends heartbeat id
+            message.append(",hbid:").append(heartbeatSequence++);
 
             // appends memory usage
             MemoryMXBean memoryMxBean = ManagementFactory.getMemoryMXBean();
